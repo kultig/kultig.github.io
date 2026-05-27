@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <title>Wo zwickts?</title>
     <link rel="stylesheet" type="text/css" href="..\..\style.css">
+    <link rel="stylesheet" type="text/css" href="erich.css">
 </head>
 
-<body>
+<body class="erich-archive">
     <header>
         <img src="../../images/logo.png" width="20%"/>
         <!-- <h1>kultig.jung</h1> -->
@@ -26,16 +27,34 @@
         </ul>
     </nav>
     <main>
-        <section id="wo-zwickts">
+        <section class="archive-hero" id="wo-zwickts">
+            <p class="archive-kicker">Erichs Mini-Archiv</p>
             <h1>Wo zwickts?</h1>
-            <p>
-                Erich sammelt hier kleine Ideen, Nebenwege und Projekte, die noch nicht ganz fertig sind,
-                aber schon laut genug klopfen, um eine eigene Seite zu bekommen.
+            <p class="archive-intro">
+                Mineralien, Naturfotos, kleine Programme, Basteltools und 3D-Renderings:
+                hier landet alles, was interessant genug ist, um nicht in einer Schublade zu verschwinden.
             </p>
-            <h2>Weitere Projekte von Erich</h2>
-            <p><a href="klangkiste.html">Erichs Klangkiste</a></p>
-            <p><a href="buehnenrand.html">Am B&uuml;hnenrand</a></p>
-            <p><a href="notizbuch.html">Erichs Notizbuch</a></p>
+        </section>
+
+        <section class="archive-grid" aria-label="Archivbereiche">
+            <article class="archive-card tilt-left">
+                <span class="archive-label">Mineralien + Natur</span>
+                <h2>Steine, Licht, Fundorte</h2>
+                <p>Kurze Eintraege zu Mineralien, Naturfotos und Beobachtungen draussen.</p>
+                <a href="klangkiste.html">Durchblaettern</a>
+            </article>
+            <article class="archive-card tilt-right">
+                <span class="archive-label">Code + Tools</span>
+                <h2>Programme und Bastelkram</h2>
+                <p>Kleine Softwareideen, Werkzeuge, Experimente und Dinge, die beim Entwickeln helfen.</p>
+                <a href="buehnenrand.html">Ansehen</a>
+            </article>
+            <article class="archive-card tilt-left">
+                <span class="archive-label">3D + Renderings</span>
+                <h2>Bilder aus dem Rechner</h2>
+                <p>Renderings, Materialtests, Szenenideen und digitale Fundstuecke.</p>
+                <a href="notizbuch.html">Oeffnen</a>
+            </article>
         </section>
     </main>
     <footer>
