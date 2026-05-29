@@ -3,6 +3,8 @@ let stepTimer;
 let currentStep = 0;
 const musicButton = document.querySelector(".music-button");
 const musicLabel = document.querySelector(".music-label");
+const scrapbook = document.querySelector(".scrapbook");
+const scrapCards = document.querySelectorAll(".scrap-card");
 
 const melody = [
   247, 220, 196, 294, 294, 294, 247, 220, 196,
@@ -12,6 +14,24 @@ const melody = [
   220, 262, 330, 294, 294, 392, 247, 247, 220,
   196, 196, 196,
 ];
+
+function randomDegree(min, max) {
+  return `${Math.round(min + Math.random() * (max - min))}deg`;
+}
+
+function randomizeCurveRotations() {
+  document.body.style.setProperty("--body-curve-left", randomDegree(-30, -8));
+  document.body.style.setProperty("--body-curve-right", randomDegree(10, 34));
+  scrapbook.style.setProperty("--scrapbook-curve-left", randomDegree(18, 44));
+  scrapbook.style.setProperty("--scrapbook-curve-right", randomDegree(-48, -22));
+  scrapbook.style.setProperty("--cover-curve", randomDegree(-28, -8));
+  scrapbook.style.setProperty("--cover-ribbon", randomDegree(-22, 4));
+
+  scrapCards.forEach((card) => {
+    card.style.setProperty("--card-curve-soft", randomDegree(10, 42));
+    card.style.setProperty("--card-curve-line", randomDegree(-42, -10));
+  });
+}
 
 function playBeep(frequency, duration) {
   const oscillator = audioContext.createOscillator();
@@ -70,7 +90,7 @@ function stopMusic() {
 function updateDebugButton(isPlaying) {
   musicButton.classList.toggle("is-playing", isPlaying);
   musicButton.setAttribute("aria-pressed", String(isPlaying));
-  musicLabel.textContent = isPlaying ? "Play my favorite song" : "Stop the music";
+  musicLabel.textContent = isPlaying ? "Stop the music" : "Play my favorite song";
 }
 
 function startWhenAllowed() {
@@ -98,4 +118,12 @@ musicButton.addEventListener("click", () => {
   startWhenAllowed();
 });
 
+scrapCards.forEach((card) => {
+  card.addEventListener("mouseenter", () => {
+    card.style.setProperty("--card-curve-soft", randomDegree(10, 42));
+    card.style.setProperty("--card-curve-line", randomDegree(-42, -10));
+  });
+});
+
+randomizeCurveRotations();
 startWhenAllowed();
