@@ -1,13 +1,16 @@
-const musicButton = document.querySelector(".music-button");
-const musicLabel = document.querySelector(".music-label");
-
 let audioContext;
 let stepTimer;
 let currentStep = 0;
+const musicButton = document.querySelector(".music-button");
+const musicLabel = document.querySelector(".music-label");
 
 const melody = [
-  262, 330, 392, 523, 392, 330, 294, 392,
-  262, 330, 440, 587, 523, 392, 330, 294
+  247, 220, 196, 294, 294, 294, 247, 220, 196,
+  330, 330, 330, 220, 262, 330, 294, 294, 294,
+  294, 294, 262, 247, 247, 247, 247, 220, 196,
+  294, 294, 294, 247, 220, 196, 330, 330, 330,
+  220, 262, 330, 294, 294, 392, 247, 247, 220,
+  196, 196, 196,
 ];
 
 function playBeep(frequency, duration) {
@@ -28,8 +31,21 @@ function playBeep(frequency, duration) {
   oscillator.stop(now + duration + 0.02);
 }
 
-function startMusic() {
-  audioContext = audioContext || new AudioContext();
+async function startMusic() {
+  audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+
+  if (audioContext.state === "suspended") {
+    await audioContext.resume();
+  }
+
+  if (audioContext.state !== "running") {
+    throw new Error("Audio is waiting for browser permission.");
+  }
+
+  if (stepTimer) {
+    return;
+  }
+
   currentStep = 0;
 
   stepTimer = window.setInterval(() => {
@@ -40,29 +56,46 @@ function startMusic() {
     }
 
     currentStep += 1;
-  }, 150);
+  }, 400);
 
-  musicButton.classList.add("is-playing");
-  musicButton.setAttribute("aria-pressed", "true");
-  musicLabel.textContent = "Musik laeuft";
+  updateDebugButton(true);
 }
 
 function stopMusic() {
   window.clearInterval(stepTimer);
   stepTimer = null;
-  musicButton.classList.remove("is-playing");
-  musicButton.setAttribute("aria-pressed", "false");
-  musicLabel.textContent = "8-bit Musik";
+  updateDebugButton(false);
 }
 
-musicButton.addEventListener("click", async () => {
-  if (audioContext?.state === "suspended") {
-    await audioContext.resume();
+function updateDebugButton(isPlaying) {
+  musicButton.classList.toggle("is-playing", isPlaying);
+  musicButton.setAttribute("aria-pressed", String(isPlaying));
+  musicLabel.textContent = isPlaying ? "Play my favorite song" : "Stop the music";
+}
+
+function startWhenAllowed() {
+  startMusic().catch(() => {
+    document.addEventListener("pointerdown", startWhenAllowed, { once: true });
+    document.addEventListener("keydown", startWhenAllowed, { once: true });
+  });
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    stopMusic();
+    return;
   }
 
+  startWhenAllowed();
+});
+
+musicButton.addEventListener("click", () => {
   if (stepTimer) {
     stopMusic();
-  } else {
-    startMusic();
+    return;
   }
+
+  startWhenAllowed();
 });
+
+startWhenAllowed();
